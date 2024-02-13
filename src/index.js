@@ -1,21 +1,30 @@
 import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
-const port = 3000;
+import multer from "multer";
+
 import productRoutes from './routes/product.routes.js';
 import userRoutes from './routes/user.routes.js';
+import uploadRoutes from './routes/upload.routes.js';
 
+dotenv.config();
+const port = 3000;
 const app = express();
 
+const upload = multer({ dest: 'uploads/' });
+
 app.use(express.json());
+
 app.use('/products', productRoutes);
 app.use('/users', userRoutes);
+app.use('/uploads', uploadRoutes);
 
-const bootstrap = () => {
+app.use(upload.single('image'));
+
+const bootstrap = async () => {
     try {
-        mongoose.connect(process.env.DB_URL);
-      
+        await mongoose.connect(process.env.DB_URL);
+
         mongoose.connection.on('connected', () => { console.log('Connected to MongoDB') });
         mongoose.connection.on('error', (error) => { console.error('Error connecting to MongoDB:', error.message) });
         mongoose.connection.on('disconnected', () => { console.log('Disconnected from MongoDB') });

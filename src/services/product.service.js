@@ -17,12 +17,13 @@ export class ProductService {
         }
     }
 
-    async createProduct(product) {
+    async createProduct(productData, image) {
         try {
+            const imagePath = "/" + image.filename;
+            const product = { ...productData, image: imagePath };
             return await new Product(product).save();
-        }
-        catch (error) {
-			throw error;
+        } catch (error) {
+            throw error;
         }
     }
 }

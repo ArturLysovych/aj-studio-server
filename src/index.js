@@ -4,11 +4,13 @@ import dotenv from "dotenv";
 dotenv.config();
 const port = 3000;
 import productRoutes from './routes/product.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 const app = express();
 
 app.use(express.json());
 app.use('/products', productRoutes);
+app.use('/users', userRoutes);
 
 const bootstrap = () => {
     try {

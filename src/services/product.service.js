@@ -8,6 +8,14 @@ export class ProductService {
 			throw error;
         }
     }
+    
+    async getProductById(id) {
+        try {
+            return await Product.findById(id);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async createProduct(product) {
         try {

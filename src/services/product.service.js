@@ -20,10 +20,14 @@ export class ProductService {
     async createProduct(productData, image) {
         try {
             const imagePath = "/" + image.filename;
-            const product = { ...productData, image: imagePath };
+            
+            const tags = JSON.parse(productData.tags);
+    
+            const product = { ...productData, tags, image: imagePath };
             return await new Product(product).save();
         } catch (error) {
             throw error;
         }
     }
+    
 }

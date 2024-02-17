@@ -2,22 +2,26 @@ import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
 import multer from "multer";
+import cors from "cors";
 
 import productRoutes from './routes/product.routes.js';
 import userRoutes from './routes/user.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
+import authRoutes from './routes/auth.routes.js'
 
 dotenv.config();
-const port = 3000;
+const port = process.env.PORT || 5000;
 const app = express();
 
 const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/products', productRoutes);
 app.use('/users', userRoutes);
 app.use('/uploads', uploadRoutes);
+app.use('/auth', authRoutes)
 
 app.use(upload.single('image'));
 

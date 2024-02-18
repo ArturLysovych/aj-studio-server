@@ -22,7 +22,10 @@ export class AuthController {
                 return res.status(401).json({ message: 'Incorrect username or password' });
             }
 
-            const token = jwt.sign({ user: user }, secretKey, { expiresIn: '24h' });
+            const { _id, username: UserName, password: UserPassword, __v } = user;
+            const tokenUser = { _id, username: UserName, password: UserPassword, __v };
+            
+            const token = jwt.sign({ user: tokenUser }, secretKey, { expiresIn: '24h' });
 
             res.status(200).json({ token });
         } catch (error) {

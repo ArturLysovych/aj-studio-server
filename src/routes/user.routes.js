@@ -6,5 +6,7 @@ const router = new Router();
 
 router.get("/", userController.getUsers);
 router.get("/:userId", userController.getUserById);
+router.get("/likes/:userId", userController.getLikesByUserId);
+router.post("/:userId/like/:productId", userController.toggleLike);
 
 export default router;

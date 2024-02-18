@@ -16,14 +16,4 @@ export class UserService {
             throw error;
         }
     }
-
-    async createUser(userInfo) {
-        try {
-            const user = new User(userInfo);
-
-            return await User.create(user);
-        } catch (error) {
-            throw error;
-        }
-    }
 }

@@ -5,6 +5,7 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 const orderController = new OrderController(); 
 const router = express.Router();
 
+router.get("/pending", orderController.getPendingOrders);
 router.get("/", orderController.getAllOrders);
 router.get("/:orderId", orderController.getOrderById);
 router.post('/make-order', authMiddleware, orderController.makeOrder);

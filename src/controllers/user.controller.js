@@ -1,8 +1,7 @@
 import { UserService } from "../services/user.service.js";
 const userService = new UserService();
-import mongoose from "mongoose";
-export class UserController {
 
+export class UserController {
     async getUsers(req, res) {
         try {
             const users = await userService.getUsers();
@@ -26,9 +25,6 @@ export class UserController {
         try {
             const userId = req.params.userId;
             const productId = req.params.productId;
-            
-            console.log(userId);
-            console.log(productId);
 
             const user = await userService.toggleLike(userId, productId);
             
@@ -47,4 +43,13 @@ export class UserController {
             return res.status(500).json({ message: error.message });
         }
     }
+
+    async getNewUserCountLastWeek(req, res) {
+        try {
+            const newUserCount = await userService.getNewUserCountLastWeek();
+            return res.json({ newUserCount });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    } 
 }

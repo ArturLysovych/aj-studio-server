@@ -5,7 +5,8 @@ export const productSchema = new Schema({
     price: { type: Number, required: true },
     oldPrice: { type: Number, required: false },
     tags: [{ type: String, required: false }],
-    image: { type: String, required: true }
+    image: { type: String, required: true },
+    createdAt: { type: Date, default: () => new Date().toISOString() }
 });
 
 const Product = model('Product', productSchema);

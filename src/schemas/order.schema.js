@@ -8,7 +8,8 @@ const orderSchema = new Schema({
     status: {
         type: String,
         default: 'pending'
-    }
+    },
+    createdAt: { type: Date, default: () => new Date().toISOString() }
 });
 
 const Order = model('Order', orderSchema);

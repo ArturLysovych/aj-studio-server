@@ -9,6 +9,7 @@ import userRoutes from './routes/user.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import adminRoutes from './routes/admin.routes.js'
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.use('/users', userRoutes);
 app.use('/uploads', uploadRoutes);
 app.use('/auth', authRoutes);
 app.use('/orders', orderRoutes);
+app.use('/admin', adminRoutes)
 
 app.use(upload.single('image'));
 

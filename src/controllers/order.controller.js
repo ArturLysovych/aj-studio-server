@@ -51,4 +51,31 @@ export class OrderController {
             return res.status(500).json({ message:`Order not found: ${error.message}` });
         }
     }
+
+    async getPendingOrders(req, res) {
+        try {
+            const pendingOrders = await orderService.getPendingOrders();
+            return res.status(200).json(pendingOrders);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async getNewOrderCountLastWeek(req, res) {
+        try {
+            const newOrderCount = await orderService.getNewOrderCountLastWeek();
+            return res.json({ newOrderCount });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    } 
+
+    async getOrdersForChart(req, res) {
+        try {
+            const chartInfo = await orderService.getOrdersForChart();
+            return res.json({ chartInfo });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    } 
 }

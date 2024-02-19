@@ -1,6 +1,6 @@
 import User from "../schemas/user.schema.js";
-import mongoose from "mongoose";
 import { ProductService } from "./product.service.js";
+import moment from 'moment';
 
 const productService = new ProductService();
 
@@ -47,10 +47,29 @@ export class UserService {
         try {
             const user = await this.getUserById(userId);
             const likes = user.likes;
-            console.log(likes);
             return likes;
         } catch (error) {
             throw error;
         }
     }
+
+    async getNewUserCountLastWeek() {
+        try {
+            const today = moment();
+            const startOfThisWeek = today.clone().subtract('week').startOf('isoWeek').toDate();
+            const endOfLastWeek = today.clone().subtract('week').endOf('isoWeek').toDate();
+    
+            const newUserCount = await User.countDocuments({
+                createdAt: {
+                    $gte: startOfThisWeek,
+                    $lte: endOfLastWeek
+                }
+            });
+    
+            return { newUserCount, totalUsers: await User.countDocuments() };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }

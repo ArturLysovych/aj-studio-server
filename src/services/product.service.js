@@ -19,7 +19,7 @@ export class ProductService {
 
     async createProduct(productData, image) {
         try {
-            const imagePath = "/" + image.filename;
+            const imagePath = "/" + image.filename || image.name;
             
             const tags = JSON.parse(productData.tags);
     
@@ -30,4 +30,28 @@ export class ProductService {
         }
     }
     
+    async editProduct(editedProduct, productId) {
+        try {
+            const product = await this.getProductById(productId);
+            Object.assign(product, editedProduct);
+            
+            return await product.save();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteProduct(productId) {
+        try {
+            const productToDelete = await Product.findByIdAndDelete(productId);
+
+            if (!productToDelete) {
+                throw new Error("Product not found");
+            }
+
+            return "Product deleted successfully";
+        } catch (error) {
+            throw error;
+        }
+    }
 }

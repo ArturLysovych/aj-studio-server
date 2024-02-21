@@ -1,11 +1,11 @@
 import { Schema, model } from "mongoose"
 
 export const productSchema = new Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
+    name: { type: String, required: false },
+    price: { type: Number, required: false },
     oldPrice: { type: Number, required: false },
     tags: [{ type: String, required: false }],
-    image: { type: String, required: true },
+    image: { type: String, required: false },
     createdAt: { type: Date, default: () => new Date().toISOString() }
 });
 

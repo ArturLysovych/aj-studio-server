@@ -5,7 +5,11 @@ export const userSchema = new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     likes: [productSchema],
-    createdAt: { type: Date, default: () => new Date().toISOString() }
+    createdAt: { type: Date, default: () => new Date().toISOString() },
+    role: {
+        type: String,
+        default: 'USER'
+    }
 });
 
 const User = model('User', userSchema);

@@ -35,5 +35,34 @@ export class ProductController {
 				res.status(500).json({ message: error.message });
 			}
 		});
-	}	
+	}
+
+	async editProduct(req, res) {
+        upload.single('image')(req, res, async (err) => {
+            try {
+                if (err) {
+                    throw new Error(err.message);
+                }
+
+                const productId = req.params.productId;
+                const editedProduct = req.body;
+
+                const updatedProduct = await productService.editProduct(editedProduct, productId);
+
+                res.status(200).json(updatedProduct);
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+	}
+	
+	async deleteProduct(req, res) {
+        try {
+            const productId = req.params.productId;
+            await productService.deleteProduct(productId);
+            res.status(200).json({ message: "Product deleted successfully" });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }

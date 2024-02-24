@@ -3,7 +3,8 @@ import { Schema, model } from "mongoose"
 export const productSchema = new Schema({
     name: { type: String, required: false },
     price: { type: Number, required: false },
-    oldPrice: { type: Number, required: false },
+    description: { type: String, required: false, default: ''},
+    oldPrice: { type: String, required: false, default: '' },
     tags: [{ type: String, required: false }],
     image: { type: String, required: false },
     createdAt: { type: Date, default: () => new Date().toISOString() }

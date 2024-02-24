@@ -33,6 +33,8 @@ export class ProductService {
     async editProduct(editedProduct, productId) {
         try {
             const product = await this.getProductById(productId);
+            product.oldPrice = product.price;
+            
             Object.assign(product, editedProduct);
             
             return await product.save();

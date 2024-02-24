@@ -23,17 +23,16 @@ export class UserService {
 
     async toggleLike(userId, productId) {
         try {
-            const product = await productService.getProductById(productId);
-    
             const user = await this.getUserById(userId);
-            console.log(user)
+    
             if (!user) {
                 throw new Error("User not found");
             }
     
-            const existingIndex = user.likes.findIndex(like => like._id.toString() === productId);
-            if (existingIndex !== -1) user.likes.splice(existingIndex, 1);
-            else user.likes.push(product);
+            const isLiked = user.likes.includes(productId);
+    
+            if (isLiked) user.likes = user.likes.filter(like => like !== productId);
+            else user.likes.push(productId);
     
             const updatedUser = await user.save();
     
@@ -42,6 +41,7 @@ export class UserService {
             throw error;
         }
     }
+    
 
     async getLikesByUserId(userId) {
         try {

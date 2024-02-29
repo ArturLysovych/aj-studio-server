@@ -21,9 +21,14 @@ export class ProductService {
         try {
             const imagePath = "/" + image.filename || image.name;
             
+            const sizes = JSON.parse(productData.sizes);
             const tags = JSON.parse(productData.tags);
+            const colors = JSON.parse(productData.colors);
     
-            const product = { ...productData, tags, image: imagePath };
+            console.log(tags);
+            console.log(sizes);
+
+            const product = { ...productData, tags, colors, sizes, image: imagePath };
             return await new Product(product).save();
         } catch (error) {
             throw error;
@@ -34,14 +39,26 @@ export class ProductService {
         try {
             const product = await this.getProductById(productId);
             product.oldPrice = product.price;
-            
+    
+            if (editedProduct.tags) {
+                editedProduct.tags = JSON.parse(editedProduct.tags);                
+            }
+    
+            if (editedProduct.colors) {
+                editedProduct.colors = JSON.parse(editedProduct.colors);
+            }
+
+            if (editedProduct.sizes) {
+                editedProduct.sizes = JSON.parse(editedProduct.sizes);
+            }
+    
             Object.assign(product, editedProduct);
             
             return await product.save();
         } catch (error) {
             throw error;
         }
-    }
+    }    
 
     async deleteProduct(productId) {
         try {

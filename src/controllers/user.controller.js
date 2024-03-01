@@ -51,5 +51,26 @@ export class UserController {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    } 
+    }
+    
+    async addToViewed(req, res) {
+        try {
+            const userId = req.params.userId;
+            const productId = req.params.productId;
+            await userService.addToViewed(userId, productId);
+            return res.status(200).json({ message: "Product added to viewed successfully" });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async getViewedProductsByUserId(req, res) {
+        try {
+            const userId = req.params.userId;
+            const viewedProducts = await userService.getViewedProductsByUserId(userId);
+            return res.status(200).json(viewedProducts);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
 }

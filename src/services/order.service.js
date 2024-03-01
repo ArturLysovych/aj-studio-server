@@ -126,4 +126,14 @@ export class OrderService {
             throw error;
         }
     }
+
+    async getOrdersByUserId(userId) {
+        try {
+            const userOrders = await Order.find({ 'user._id': userId });
+            return userOrders;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }

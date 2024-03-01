@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose"
-import { productSchema } from "./product.schema.js";
 import { userSchema } from "./user.schema.js";
+import { cartSchema } from "./cart.schema.js";
 
 const orderSchema = new Schema({
     user: userSchema,
-    cart: [productSchema],
+    cart: [cartSchema],
     status: {
         type: String,
         default: 'pending'

@@ -5,6 +5,7 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 const orderController = new OrderController(); 
 const router = express.Router();
 
+router.get('/user-orders/:userId', orderController.getOrdersByUserId);
 router.get("/pending", orderController.getPendingOrders);
 router.get("/", orderController.getAllOrders);
 router.get("/:orderId", orderController.getOrderById);

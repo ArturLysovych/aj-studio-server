@@ -1,5 +1,7 @@
 import { OrderService } from "../services/order.service.js";
+import { NotificationService } from "../services/notification.service.js";
 const orderService = new OrderService();
+const notificationService = new NotificationService();
 
 export class OrderController {
     async getAllOrders(req, res) {
@@ -25,6 +27,14 @@ export class OrderController {
         try {
             const orderData = req.body;
             const order = await orderService.makeOrder(orderData);
+
+            console.log(order);
+
+            const userId = order.user._id;
+            const message = `Order created ${new Date(order.createdAt).toLocaleString()}, ${order._id}`;
+            const type = 'Order info';
+
+            await notificationService.createNotification(userId, message, type);
             return res.status(200).json(order);
 		} catch (error) {
 			return res.status(500).json({ message: error.message });
@@ -35,6 +45,13 @@ export class OrderController {
         try {
             const { orderId, newStatus } = req.params;
             const updatedOrder = await orderService.changeOrderStatus(orderId, newStatus);
+
+            const userId = updatedOrder.user._id;
+            const message = `Order status changed to ${updatedOrder.status}, ${updatedOrder._id}`;
+            const type = 'Order changes';
+
+            await notificationService.createNotification(userId, message, type);
+            
             return res.status(200).json(updatedOrder);  
 
         } catch (error) {

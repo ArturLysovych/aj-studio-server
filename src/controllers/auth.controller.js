@@ -23,7 +23,7 @@ export class AuthController {
             }
 
             const { _id, username: UserName, password: UserPassword, role, __v } = user;
-            const tokenUser = { _id, username: UserName, password: UserPassword, role, __v };
+            const tokenUser = { _id, username: UserName, password: UserPassword, role,   __v };
             
             const token = jwt.sign({ user: tokenUser }, secretKey, { expiresIn: '24h' });
 

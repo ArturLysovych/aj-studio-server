@@ -24,9 +24,6 @@ export class ProductService {
             const sizes = JSON.parse(productData.sizes);
             const tags = JSON.parse(productData.tags);
             const colors = JSON.parse(productData.colors);
-    
-            console.log(tags);
-            console.log(sizes);
 
             const product = { ...productData, tags, colors, sizes, image: imagePath };
             return await new Product(product).save();

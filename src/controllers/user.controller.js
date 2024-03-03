@@ -73,4 +73,41 @@ export class UserController {
             return res.status(500).json({ message: error.message });
         }
     }
+
+    async getLikedProductsByUserId(req, res) {
+        try {
+            const userId = req.params.userId;
+            const likedProducts = await userService.getLikedProductsByUserId(userId);
+            return res.status(200).json(likedProducts);
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async bindEmailToUser(req, res) {
+        try {
+            const userId = req.params.userId;
+            const email = req.body.email;
+            console.log(email)
+            
+            await userService.bindEmailToUser(userId, email);
+
+            return res.status(200).json({ message: "Link message sent" });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async confirmEmail(req, res) {
+        try {
+            const userId = req.params.userId;
+            const { email, confirmationCode } = req.body;
+
+            await userService.confirmEmail(userId, email, confirmationCode);
+
+            return res.status(200).json({ message: "Email confirmed successfully" });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
 }

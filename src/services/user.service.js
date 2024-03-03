@@ -1,6 +1,8 @@
 import User from "../schemas/user.schema.js";
 import { ProductService } from "./product.service.js";
 import moment from 'moment';
+import nodemailer from 'nodemailer';
+import { v1 as uuidv1 } from 'uuid';
 
 const productService = new ProductService();
 
@@ -111,4 +113,102 @@ export class UserService {
         }
     }
     
+    async getLikedProductsByUserId(userId) {
+        try {
+            const user = await this.getUserById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+            
+            const likedProducts = await Promise.all(user.likes.map(productId => productService.getProductById(productId)));
+            
+            return likedProducts;
+        } catch (error) {
+            throw new Error(`Error getting liked products: ${error.message}`);
+        }
+    }
+
+    async bindEmailToUser(userId, email) {
+        try {
+            const user = await this.getUserById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const existingUserWithEmail = await User.findOne({ email });
+            if (existingUserWithEmail) {
+                throw new Error('Email is already linked to another user');
+            }
+
+            const confirmationCode = uuidv1();
+
+            user.email = '';
+            user.unconfirmedEmail = email;
+            user.confirmationCode = confirmationCode;
+
+            console.log(user)
+            await user.save();
+
+            await this.sendConfirmationEmail(userId, email, confirmationCode);
+
+            return { message: "Confirmation email sent." };
+        } catch (error) {
+            throw new Error(`Error binding email to user: ${error.message}`);
+        }
+    }
+
+    
+    async sendConfirmationEmail(userId, email, confirmationCode) {
+        try {
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAIL_TOKEN
+                }
+            });
+
+            const mailOptions = {
+                from: 'PJ STUDIO',
+                to: email,
+                subject: 'Email Confirmation',
+                html: `
+                <p>Click to the button to link mail, if it's not you, ignore it.</p>
+                <a href="http://localhost:3000/profile/confirm-email?userId=${userId}&email=${email}&confirmationCode=${confirmationCode}">
+                    <button type="submit">Confirm Email</button>
+                </form>`
+            };
+
+            await transporter.sendMail(mailOptions);
+
+            console.log('Confirmation email sent');
+        } catch (error) {
+            throw new Error(`Error sending confirmation email: ${error.message}`);
+        }
+    }
+
+    async confirmEmail(userId, email, confirmationCode) {
+        try {
+            const user = await this.getUserById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            if (user.confirmationCode !== confirmationCode) {
+                throw new Error('Invalid confirmation code');
+            }
+
+            user.email = user.unconfirmedEmail;
+            user.unconfirmedEmail = undefined;
+            user.confirmationCode = undefined;
+
+            await user.save();
+
+            return { message: "Succesfully confirmed." };
+        } catch (error) {
+            throw new Error(`Error confirming email: ${error.message}`);
+        }
+    }
 }

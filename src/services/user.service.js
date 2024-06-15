@@ -175,11 +175,17 @@ export class UserService {
                 to: email,
                 subject: 'Email Confirmation',
                 html: `
-                <p>Click to the button to link mail, if it's not you, ignore it.</p>
-                <a href="http://localhost:3000/profile/confirm-email?userId=${userId}&email=${email}&confirmationCode=${confirmationCode}">
-                    <button type="submit">Confirm Email</button>
-                </form>`
-            };
+                <body style="font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px;">
+                    <div style="max-width: 600px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+                        <h1 style="font-size: 32px; color: #333;"><span style="color: #FF5E00;">P</span>J Studio</h1>
+                        <h2 style="font-size: 24px; color: #333;">Click the button to link mail, if it's not you, ignore it.</h2>
+                        <a href="http://localhost:3000/profile/confirm-email?userId=${userId}&email=${email}&confirmationCode=${confirmationCode}" style="text-decoration: none;">
+                            <button type="submit" style="background-color: #FF5E00; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Confirm Email</button>
+                        </a>
+                    </div>
+                </body>
+                    `
+                };
 
             await transporter.sendMail(mailOptions);
 
